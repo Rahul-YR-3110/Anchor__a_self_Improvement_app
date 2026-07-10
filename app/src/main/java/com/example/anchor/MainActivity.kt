@@ -10,7 +10,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.anchor.ui.notes.NotesScreen
 import com.example.anchor.ui.theme.AnchorTheme
+import androidx.compose.foundation.layout.Box
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,10 +21,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             AnchorTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        NotesScreen()
+                    }
                 }
             }
         }
