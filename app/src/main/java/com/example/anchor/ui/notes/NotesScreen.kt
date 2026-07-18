@@ -17,7 +17,10 @@ import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.anchor.ui.theme.AnchorTheme
 
 @Composable
 fun NotesScreen() {
@@ -26,9 +29,8 @@ fun NotesScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-    )
-    {
+            .padding(horizontal = 10.dp, vertical = 40.dp)
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -38,7 +40,8 @@ fun NotesScreen() {
                     noteInput.value = newValue
                 },
                 placeholder = { Text("Enter a note...") },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                shape= RoundedCornerShape(10.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
 
@@ -64,5 +67,13 @@ fun NotesScreen() {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun NotesScreenPreview() {
+    AnchorTheme {
+        NotesScreen()
     }
 }

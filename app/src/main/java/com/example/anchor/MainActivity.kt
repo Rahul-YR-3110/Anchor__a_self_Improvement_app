@@ -24,7 +24,6 @@ class MainActivity : ComponentActivity() {
                     composable("home") { HomeScreen(navController) }
                     composable("notes") { NotesScreen() }
                 }
-                HomeScreen(navController)
             }
         }
     }
