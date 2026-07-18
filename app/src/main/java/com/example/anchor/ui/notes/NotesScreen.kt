@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.anchor.ui.theme.AnchorTheme
@@ -39,7 +40,7 @@ fun NotesScreen() {
                 onValueChange = { newValue ->
                     noteInput.value = newValue
                 },
-                placeholder = { Text("Enter a note...") },
+                placeholder = { Text("Enter a note...",color = MaterialTheme.colorScheme.secondary) },
                 modifier = Modifier.weight(1f),
                 shape= RoundedCornerShape(10.dp)
             )
@@ -53,7 +54,7 @@ fun NotesScreen() {
                     }
                 }
             ) {
-                Text("Add")
+                Text("Add",color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         Spacer(modifier = Modifier.height(16.dp)) // Gap below the row

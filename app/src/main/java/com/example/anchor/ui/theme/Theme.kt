@@ -11,33 +11,32 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+// 1. Define your custom dark color scheme mapping here
+private val CustomDarkColorScheme = darkColorScheme(
+    background = BackgroundDark,
+    surface = CardDark,                  // Standard small cards
+    surfaceVariant = MainCardLight,      // The special light water card
+    primary = TerracottaAccent,          // The orange "+" button
+    secondary = LightTerracotta,
+    onBackground = TextWhite,            // Text on main background
+    onSurface = TextWhite,               // Text on standard cards
+    onSurfaceVariant = TextDarkBrown,// Dark text inside the light card
+
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+// Optional: Fallback light scheme if you ever turn off dark mode
+private val CustomLightColorScheme = lightColorScheme(
+    primary = TerracottaAccent,
+    background = TextWhite,
+    surface = MainCardLight
 )
 
 @Composable
 fun AnchorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // 2. CHANGED TO FALSE: Disables Android's dynamic wallpaper coloring
+    // so your app strictly forces your custom terracotta palette.
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -46,8 +45,9 @@ fun AnchorTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        // 3. Point these to your new custom configurations
+        darkTheme -> CustomDarkColorScheme
+        else -> CustomLightColorScheme
     }
 
     MaterialTheme(
