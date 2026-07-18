@@ -44,10 +44,9 @@ fun NotesScreen() {
 
             Button(
                 onClick = {
-                    // Only add the note if the user actually typed something
                     if (noteInput.value.isNotBlank()) {
-                        notesList.add(noteInput.value) // Add the text to our state list
-                        noteInput.value = "" // Clear the input box so it's empty again!
+                        notesList.add(noteInput.value)
+                        noteInput.value = ""
                     }
                 }
             ) {
