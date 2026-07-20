@@ -1,6 +1,4 @@
 package com.example.anchor.ui.theme
-
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -20,8 +18,7 @@ private val CustomDarkColorScheme = darkColorScheme(
     secondary = LightTerracotta,
     onBackground = TextWhite,            // Text on main background
     onSurface = TextWhite,               // Text on standard cards
-    onSurfaceVariant = TextDarkBrown,// Dark text inside the light card
-
+    onSurfaceVariant = TextDarkBrown,    // Dark text inside the light card
 )
 
 // Optional: Fallback light scheme if you ever turn off dark mode
@@ -34,8 +31,6 @@ private val CustomLightColorScheme = lightColorScheme(
 @Composable
 fun AnchorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // 2. CHANGED TO FALSE: Disables Android's dynamic wallpaper coloring
-    // so your app strictly forces your custom terracotta palette.
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
