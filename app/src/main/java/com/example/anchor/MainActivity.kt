@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import com.example.anchor.ui.notes.NotesScreen
+import com.example.anchor.ui.Components.NotesScreen
 import com.example.anchor.ui.theme.AnchorTheme
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.anchor.ui.homepage.HomeScreen

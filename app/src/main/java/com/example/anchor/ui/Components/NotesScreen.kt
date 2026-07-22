@@ -1,4 +1,4 @@
-package com.example.anchor.ui.notes
+package com.example.anchor.ui.Components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,7 +74,7 @@ fun NotesScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun NotesScreenPreview() {
-    AnchorTheme {
+    AnchorTheme(darkTheme=true) {
         NotesScreen()
     }
 }
