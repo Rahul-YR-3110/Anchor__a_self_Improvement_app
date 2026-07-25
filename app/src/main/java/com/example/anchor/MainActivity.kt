@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import com.example.anchor.ui.Components.HabitTracker
 import com.example.anchor.ui.theme.AnchorTheme
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.anchor.ui.homepage.HomeScreen
@@ -44,7 +43,7 @@ class MainActivity : ComponentActivity() {
 fun NotesScreenPreview() {
     AnchorTheme {
         val fakeNavController = rememberNavController()
-        HomeScreen(fakeNavController)
+        HomeScreen(navController = fakeNavController)
     }
 }
 
