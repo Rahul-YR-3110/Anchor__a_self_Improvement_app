@@ -51,6 +51,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.remember
 import com.example.anchor.ui.theme.TextGray
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Shield
@@ -84,7 +86,17 @@ fun HomeScreen(navController: NavController) {
                 AppBlockerCard(modifier = Modifier.weight(1f),navController = navController)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            //StreakRow()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                HabitTrackerCard(navController)
+            }
+
+
 
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -216,7 +228,7 @@ fun JournalCard(modifier: Modifier,navController: NavController ) {
             contentAlignment = Alignment.Center
         ){
             Icon(
-                imageVector = Icons.Outlined.MenuBook,
+                imageVector = Icons.Filled.MenuBook,
                 contentDescription = null,
                 tint = Color(0xFF7A5A1E),
                 modifier = Modifier.size(20.dp)
@@ -226,7 +238,8 @@ fun JournalCard(modifier: Modifier,navController: NavController ) {
             text = "Journal",
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(top = 10.dp)
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -260,11 +273,51 @@ fun AppBlockerCard(modifier: Modifier,navController: NavController ) {
             text = "App blocker",
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(top = 10.dp)
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "2 apps blocked",
+            color = TextGray,
+            fontSize = 13.sp
+        )
+    }
+}
+@Composable
+fun HabitTrackerCard(navController: NavController){
+    Column(modifier=Modifier
+        .clip(RoundedCornerShape(24.dp))
+        .clickable {
+            navController.navigate("HabitTracker")
+        }
+        .fillMaxWidth()
+        .background(MaterialTheme.colorScheme.surface)
+        .padding(18.dp)
+    ){
+        Box(modifier=Modifier
+            .size(40.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color(0xFFF3E3B5)),
+            contentAlignment = Alignment.Center
+        ){
+            Icon(
+                imageVector = Icons.Filled.Menu,
+                contentDescription = null,
+                tint = Color(0xFF7A5A1E),
+                modifier = Modifier.size(20.dp)
+            )
+        }
+        Text(
+            text = "Habit Tracker",
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(top = 10.dp)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "3 entries this week",
             color = TextGray,
             fontSize = 13.sp
         )
