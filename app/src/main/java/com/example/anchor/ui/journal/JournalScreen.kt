@@ -1,5 +1,4 @@
 package com.example.anchor.ui.journal
-import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -32,6 +32,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -85,9 +86,8 @@ fun LocalDateTime.toRelativeFormattedString(): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalScreen() {
-    // Custom Dark Color Palette based on design preview
-    val backgroundColor = Color(0xFF222222)
-    val fabColor = Color(0xFFD85834) // Warm Terracotta Orange
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val fabColor = MaterialTheme.colorScheme.primary
 
     // Sample initial list matching the design preview
     val journalList = remember { mutableStateListOf<JournalEntry>() }
@@ -119,36 +119,20 @@ fun JournalScreen() {
                 .padding(horizontal = 20.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-
-            // TOP NAVIGATION BAR
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(onClick = { /* Open Drawer or Menu */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = "Menu",
-                        tint = Color.White
-                    )
-                }
                 Text(
                     text = "Journal",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-                IconButton(onClick = { /* Search */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
-                        tint = Color.White
-                    )
-                }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // SUBHEADER COUNTER
             Text(
@@ -175,15 +159,12 @@ fun JournalScreen() {
                     contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
                     itemsIndexed(journalList, key = { _, entry -> entry.id }) { index, entry ->
-                        // Highlight the first (latest) entry with a lighter background card
                         val isLatest = index == 0
                         JournalEntryCard(entry = entry, isHighlighted = isLatest)
                     }
                 }
             }
         }
-
-        // ADD ENTRY SHEET
         if (showAddSheet) {
             AddJournalBottomSheet(
                 onDismiss = { showAddSheet = false },
@@ -249,7 +230,12 @@ fun AddJournalBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         containerColor = Color(0xFF2C2C2C),
-        contentColor = Color.White
+        contentColor = Color.White,
+        dragHandle = {
+            BottomSheetDefaults.DragHandle(
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
     ) {
         Column(
             modifier = Modifier
@@ -295,7 +281,7 @@ fun AddJournalBottomSheet(
                 onValueChange = { noteText = it },
                 placeholder = { Text("Write your thoughts...", color = Color.Gray) },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(0xFFD85834),
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                     unfocusedBorderColor = Color.Gray,
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White

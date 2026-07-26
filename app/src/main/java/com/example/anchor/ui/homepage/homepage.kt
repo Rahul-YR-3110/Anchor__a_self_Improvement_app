@@ -57,9 +57,12 @@ import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.ui.text.style.LineHeightStyle
+import java.time.LocalDateTime
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    val timestamp= LocalDateTime.now()
+
     Box(modifier=Modifier
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.background))
@@ -70,7 +73,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(top=20.dp)
         ){
             Spacer(modifier = Modifier.height(24.dp))
-            GreetingHeader()
+            GreetingHeader(timestamp)
             WaterIntake()
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -106,12 +109,18 @@ fun HomeScreen(navController: NavController) {
 
 
 @Composable
-fun GreetingHeader(){
+fun GreetingHeader(time: LocalDateTime){
+    var greetingtime:String = when(time.hour) {
+        in 5..11 -> "Morning"
+        in 12..16 -> "Afternoon"
+        in 17..20 -> "Evening"
+        else -> "Night"
+    }
     Column(modifier = Modifier
         .padding(start = 15.dp, top = 15.dp)
         .fillMaxWidth()) {
         Text(
-            "Good morning",
+            "Good ${greetingtime}",
             textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
