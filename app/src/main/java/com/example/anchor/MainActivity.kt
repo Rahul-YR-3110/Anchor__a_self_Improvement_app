@@ -8,14 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import com.example.anchor.ui.theme.AnchorTheme
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.anchor.ui.homepage.HomeScreen
+import com.example.anchor.ui.pages.HomeScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Surface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import com.example.anchor.ui.journal.JournalScreen
+import com.example.anchor.ui.pages.HabitTrackerScreen
+import com.example.anchor.ui.pages.JournalScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "home") {
                         composable("home") { HomeScreen(navController) }
                         composable("notes") {   JournalScreen() }
+                        composable( "Habittracker" ){ HabitTrackerScreen() }
                     }
             }
         }
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun NotesScreenPreview() {
-    AnchorTheme {
+    AnchorTheme(darkTheme=true) {
         val fakeNavController = rememberNavController()
         HomeScreen(navController = fakeNavController)
     }

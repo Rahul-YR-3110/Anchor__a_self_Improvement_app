@@ -1,6 +1,5 @@
-package com.example.anchor.ui.homepage
+package com.example.anchor.ui.pages
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,15 +16,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocalBar
 import androidx.compose.material.icons.outlined.LocalBar
 import androidx.compose.material.icons.outlined.WaterDrop
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,20 +39,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.anchor.ui.theme.AnchorTheme
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.Color
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.WineBar
 import androidx.compose.material3.IconButton
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.runtime.remember
 import com.example.anchor.ui.theme.TextGray
-import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material.icons.outlined.Shield
-import androidx.compose.ui.text.style.LineHeightStyle
 import java.time.LocalDateTime
 
 @Composable
