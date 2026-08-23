@@ -1,73 +1,46 @@
 package com.example.anchor.ui.pages
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.NightsStay
-import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.vector.ImageVector
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.anchor.ui.theme.AnchorTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.anchor.data.local.entities.JournalEntity
+import com.example.anchor.data.local.entities.Mood
+import com.example.anchor.ui.AppViewModelProvider
+import com.example.anchor.ui.viewmodels.JournalViewModel
 import java.time.LocalDate
-import java.util.UUID
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-enum class Mood(val label:String, val icon: ImageVector){
-    SUNNY("Sunny", Icons.Default.WbSunny),
-    CLOUDY("Cloudy", Icons.Default.Cloud),
-    NIGHT("Night", Icons.Default.NightsStay)
-}
-data class JournalEntry(
-    val id: String = UUID.randomUUID().toString(),
-    val notes: String,
-    val timestamp: LocalDateTime= LocalDateTime.now(),
-    val mood: Mood
-)
+// UI helpers for Mood
+val Mood.label: String
+    get() = when (this) {
+        Mood.SUNNY -> "Sunny"
+        Mood.CLOUDY -> "Cloudy"
+        Mood.NIGHT -> "Night"
+    }
+
+val Mood.icon: ImageVector
+    get() = when (this) {
+        Mood.SUNNY -> Icons.Default.WbSunny
+        Mood.CLOUDY -> Icons.Default.Cloud
+        Mood.NIGHT -> Icons.Default.NightsStay
+    }
+
 fun LocalDateTime.toRelativeFormattedString(): String {
     val today = LocalDate.now()
     val entryDate = this.toLocalDate()
@@ -80,22 +53,21 @@ fun LocalDateTime.toRelativeFormattedString(): String {
         else -> "${this.format(DateTimeFormatter.ofPattern("EEE"))}, $timeString"
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JournalScreen() {
-    val backgroundColor = MaterialTheme.colorScheme.background
-    val fabColor = MaterialTheme.colorScheme.primary
-
-    // Sample initial list matching the design preview
-    val journalList = remember { mutableStateListOf<JournalEntry>() }
+fun JournalScreen(
+    viewModel: JournalViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val uiState by viewModel.journalUiState.collectAsState()
     var showAddSheet by remember { mutableStateOf(false) }
 
     Scaffold(
-        containerColor = backgroundColor,
+        containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAddSheet = true },
-                containerColor = fabColor,
+                containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = Color.White,
                 shape = CircleShape,
                 modifier = Modifier.size(64.dp)
@@ -108,7 +80,6 @@ fun JournalScreen() {
             }
         }
     ) { innerPadding ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -131,16 +102,14 @@ fun JournalScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // SUBHEADER COUNTER
             Text(
-                text = "${journalList.size} entries this week",
+                text = "${uiState.journalList.size} entries this week",
                 fontSize = 15.sp,
                 color = Color.White.copy(alpha = 0.7f),
                 modifier = Modifier.padding(start = 12.dp, bottom = 16.dp)
             )
 
-            // ENTRY LIST
-            if (journalList.isEmpty()) {
+            if (uiState.journalList.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -155,30 +124,32 @@ fun JournalScreen() {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
-                    itemsIndexed(journalList, key = { _, entry -> entry.id }) { index, entry ->
-                        val isLatest = index == 0
-                        JournalEntryCard(entry = entry, isHighlighted = isLatest)
+                    itemsIndexed(uiState.journalList, key = { _, entry -> entry.id }) { index, entry ->
+                        JournalEntryCard(entry = entry, isHighlighted = index == 0)
                     }
                 }
             }
         }
+
         if (showAddSheet) {
             AddJournalBottomSheet(
                 onDismiss = { showAddSheet = false },
                 onSave = { notes, selectedMood ->
-                    journalList.add(0, JournalEntry(notes = notes, mood = selectedMood))
+                    viewModel.saveJournalEntry(notes, selectedMood)
                     showAddSheet = false
                 }
             )
         }
     }
 }
+
 @Composable
-fun JournalEntryCard(entry: JournalEntry, isHighlighted: Boolean) {
+fun JournalEntryCard(entry: JournalEntity, isHighlighted: Boolean) {
     val cardBackground = if (isHighlighted) Color(0xFFFBF0EA) else Color(0xFF2C2C2C)
     val titleColor = if (isHighlighted) Color(0xFF5C1E0A) else Color.White
     val textColor = if (isHighlighted) Color(0xFF6E2D18) else Color.White.copy(alpha = 0.8f)
     val iconTint = if (isHighlighted) Color(0xFF5C1E0A) else Color.White.copy(alpha = 0.7f)
+    
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = cardBackground),
@@ -215,6 +186,7 @@ fun JournalEntryCard(entry: JournalEntry, isHighlighted: Boolean) {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddJournalBottomSheet(
@@ -295,7 +267,7 @@ fun AddJournalBottomSheet(
                     .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton (onClick = onDismiss) {
+                TextButton(onClick = onDismiss) {
                     Text("Cancel", color = Color.Gray)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -312,13 +284,5 @@ fun AddJournalBottomSheet(
                 }
             }
         }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun JournalScreenPreview() {
-    AnchorTheme(darkTheme=true) {
-        JournalScreen()
     }
 }

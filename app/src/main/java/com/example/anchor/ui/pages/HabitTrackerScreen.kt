@@ -1,68 +1,36 @@
 package com.example.anchor.ui.pages
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import java.util.UUID
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.anchor.ui.AppViewModelProvider
 import com.example.anchor.ui.theme.AnchorTheme
-
-data class HabitEntry(
-    val id: String = UUID.randomUUID().toString(),
-    val habitTitle: String,
-    val streak: Int = 0,
-    val onCountChange: (Int) -> Unit = {}
-)
+import com.example.anchor.ui.viewmodels.HabitItem
+import com.example.anchor.ui.viewmodels.HabitViewModel
 
 @Composable
-fun HabitTrackerScreen() {
-    val habitList = remember { mutableStateListOf<HabitEntry>() }
+fun HabitTrackerScreen(
+    viewModel: HabitViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    val uiState by viewModel.habitUiState.collectAsState()
     var showAddHabit by remember { mutableStateOf(false) }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
@@ -80,7 +48,6 @@ fun HabitTrackerScreen() {
                 )
             }
         }
-
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -103,12 +70,13 @@ fun HabitTrackerScreen() {
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "${habitList.size} Habits are being tracked",
+                text = "${uiState.habitItems.size} Habits are being tracked",
                 fontSize = 15.sp,
                 color = Color.White.copy(alpha = 0.7f),
                 modifier = Modifier.padding(start = 12.dp, bottom = 16.dp)
             )
-            if (habitList.isEmpty()) {
+            
+            if (uiState.habitItems.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -123,22 +91,22 @@ fun HabitTrackerScreen() {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
-                    itemsIndexed(habitList, key = { _, entry -> entry.id }) { index, entry ->
+                    items(uiState.habitItems, key = { it.habit.id }) { item ->
                         HabitEntryCard(
-                            entry = entry,
-                            onIncrement = {
-                                habitList[index] = entry.copy(streak = entry.streak + 1)
+                            item = item,
+                            onToggle = {
+                                viewModel.toggleHabitCompletion(item.habit.id, !item.isCompletedToday)
                             }
                         )
                     }
                 }
             }
 
-            if(showAddHabit){
+            if (showAddHabit) {
                 AddHabitBottomSheet(
                     onDismiss = { showAddHabit = false },
-                    onSave = { title->
-                        habitList.add(0, HabitEntry(habitTitle = title ))
+                    onSave = { title ->
+                        viewModel.addHabit(title)
                         showAddHabit = false
                     }
                 )
@@ -146,10 +114,12 @@ fun HabitTrackerScreen() {
         }
     }
 }
+
 @Composable
-fun HabitEntryCard(entry: HabitEntry, onIncrement: () -> Unit) {
+fun HabitEntryCard(item: HabitItem, onToggle: () -> Unit) {
     val cardBackground = Color(0xFF2C2C2C)
     val textColor = Color.White.copy(alpha = 0.8f)
+    
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = cardBackground),
@@ -164,7 +134,7 @@ fun HabitEntryCard(entry: HabitEntry, onIncrement: () -> Unit) {
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = entry.habitTitle,
+                    text = item.habit.title,
                     fontSize = 15.sp,
                     lineHeight = 22.sp,
                     color = textColor,
@@ -173,7 +143,7 @@ fun HabitEntryCard(entry: HabitEntry, onIncrement: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Streak: ${entry.streak} days",
+                    text = "Streak: ${item.streak} days",
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
@@ -181,29 +151,30 @@ fun HabitEntryCard(entry: HabitEntry, onIncrement: () -> Unit) {
             }
             
             IconButton(
-                onClick = onIncrement,
+                onClick = onToggle,
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = if (item.isCompletedToday) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
                     contentColor = Color.White
                 ),
                 modifier = Modifier.size(40.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Increment Streak",
+                    imageVector = if (item.isCompletedToday) Icons.Default.Check else Icons.Default.Add,
+                    contentDescription = if (item.isCompletedToday) "Completed" else "Mark Complete",
                     modifier = Modifier.size(24.dp)
                 )
             }
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitBottomSheet(
     onDismiss: () -> Unit,
     onSave: (title: String) -> Unit
 ) {
-    var HabitTitle by remember { mutableStateOf("") }
+    var habitTitle by remember { mutableStateOf("") }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -228,8 +199,8 @@ fun AddHabitBottomSheet(
                 color = Color.White
             )
             OutlinedTextField(
-                value = HabitTitle,
-                onValueChange = { HabitTitle = it },
+                value = habitTitle,
+                onValueChange = { habitTitle = it },
                 placeholder = { Text("e.g. Morning Yoga, Drink Water", color = Color.Gray.copy(alpha = 0.6f)) },
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
@@ -242,8 +213,7 @@ fun AddHabitBottomSheet(
                     focusedContainerColor = Color.White.copy(alpha = 0.05f),
                     unfocusedContainerColor = Color.White.copy(alpha = 0.05f)
                 ),
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 label = { Text("Habit Name", color = Color.White.copy(alpha = 0.7f)) }
             )
 
@@ -253,18 +223,18 @@ fun AddHabitBottomSheet(
                     .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton (onClick = onDismiss) {
+                TextButton(onClick = onDismiss) {
                     Text("Cancel", color = Color.Gray)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
-                        if (HabitTitle.isNotBlank()) {
-                            onSave(HabitTitle)
+                        if (habitTitle.isNotBlank()) {
+                            onSave(habitTitle)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD85834)),
-                    enabled = HabitTitle.isNotBlank()
+                    enabled = habitTitle.isNotBlank()
                 ) {
                     Text("Save", color = Color.White)
                 }
@@ -272,20 +242,3 @@ fun AddHabitBottomSheet(
         }
     }
 }
-@Preview(showSystemUi = true)
-@Composable
-fun HabitTrackerScreenPreview() {
-    AnchorTheme(darkTheme = true) {
-        HabitTrackerScreen()
-    }
-}
-
-
-
-
-
-
-
-
-
-
