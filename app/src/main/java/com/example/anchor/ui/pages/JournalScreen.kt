@@ -15,18 +15,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.anchor.data.local.entities.JournalEntity
 import com.example.anchor.data.local.entities.Mood
 import com.example.anchor.ui.AppViewModelProvider
+import com.example.anchor.ui.theme.AnchorTheme
 import com.example.anchor.ui.viewmodels.JournalViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-// UI helpers for Mood
 val Mood.label: String
     get() = when (this) {
         Mood.SUNNY -> "Sunny"
@@ -284,5 +285,12 @@ fun AddJournalBottomSheet(
                 }
             }
         }
+    }
+}
+@Preview
+@Composable
+fun JournalScreenPreview(){
+    AnchorTheme(darkTheme = true) {
+        JournalScreen()
     }
 }
