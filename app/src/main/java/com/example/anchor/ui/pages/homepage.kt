@@ -236,7 +236,7 @@ fun JournalCard(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
-            .clickable { navController.navigate("notes") }
+            .clickable { navController.navigate("journals") }
             .background(MaterialTheme.colorScheme.surface)
             .padding(18.dp)
     ) {

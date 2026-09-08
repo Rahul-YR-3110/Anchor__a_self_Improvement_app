@@ -2,6 +2,8 @@ package com.example.anchor.ui.pages
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -14,11 +16,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.contentcapture.ContentCaptureManager.Companion.isEnabled
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
@@ -132,7 +136,9 @@ fun AppBlockerScreen(
 @Composable
 fun AppItem(app: AppInfo) {
     val iconBitmap = remember(app.packageName) {
-        app.icon.toBitmap().asImageBitmap()
+        val width = app.icon.intrinsicWidth.takeIf { it > 0 } ?: 48
+        val height = app.icon.intrinsicHeight.takeIf { it > 0 } ?: 48
+        app.icon.toBitmap(width = width, height = height).asImageBitmap()
     }
 
     Card(
@@ -178,6 +184,22 @@ fun AppItem(app: AppInfo) {
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            var isEnabled by remember {
+                mutableStateOf(true)
+            }
+            Switch(
+                checked = isEnabled,
+                onCheckedChange = {
+                    isEnabled = it
+                }
+            )
         }
     }
 }
+
+@Preview
+@Composable
+fun AppBlockerScreenPreview() {
+    AppItem(AppInfo("WhatsApp", "com.whatsapp", ColorDrawable(Color.BLUE)))
+}
+
