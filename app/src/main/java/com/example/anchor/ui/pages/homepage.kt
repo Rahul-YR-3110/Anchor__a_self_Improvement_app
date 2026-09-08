@@ -32,7 +32,9 @@ import com.example.anchor.ui.theme.AnchorTheme
 import com.example.anchor.ui.theme.TextGray
 import com.example.anchor.ui.viewmodels.HabitViewModel
 import com.example.anchor.ui.viewmodels.JournalViewModel
+import com.example.anchor.ui.viewmodels.WaterUiState
 import com.example.anchor.ui.viewmodels.WaterViewModel
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDateTime
 
 @Composable
@@ -276,6 +278,7 @@ fun AppBlockerCard(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
+            .clickable { navController.navigate("AppBlockerScreen") }
             .background(MaterialTheme.colorScheme.surface)
             .padding(18.dp)
     ) {
@@ -351,7 +354,10 @@ fun HabitTrackerCard(
         )
     }
 }
+@Composable
+fun Taskspagecard(){
 
+}
 @Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {

@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import com.example.anchor.ui.pages.HabitTrackerScreen
 import com.example.anchor.ui.pages.JournalScreen
+import com.example.anchor.ui.pages.AppBlockerScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +33,9 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = "home") {
                         composable("home") { HomeScreen(navController) }
-                        composable("notes") {   JournalScreen() }
-                        composable( "Habittracker" ){ HabitTrackerScreen() }
+                        composable("journals") { JournalScreen() }
+                        composable("HabitTracker") { HabitTrackerScreen() }
+                        composable("AppBlockerScreen") { AppBlockerScreen(navController = navController) }
                     }
             }
         }
