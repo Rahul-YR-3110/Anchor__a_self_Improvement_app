@@ -181,7 +181,6 @@ fun JournalEntryCard(entry: JournalEntity, isHighlighted: Boolean) {
                 fontSize = 15.sp,
                 lineHeight = 22.sp,
                 color = textColor,
-                maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
         }
