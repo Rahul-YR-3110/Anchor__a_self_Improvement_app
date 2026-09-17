@@ -4,7 +4,6 @@ import com.example.anchor.data.local.daos.HabitDao
 import com.example.anchor.data.local.daos.JournalDao
 import com.example.anchor.data.local.daos.WaterIntakeDao
 import com.example.anchor.data.local.entities.HabitEntity
-import com.example.anchor.data.local.entities.HabitLogEntity
 import com.example.anchor.data.local.entities.JournalEntity
 import com.example.anchor.data.local.entities.WaterIntakeEntity
 import kotlinx.coroutines.flow.Flow
@@ -26,19 +25,8 @@ class OfflineAnchorRepository(
     override fun getAllHabitsStream(): Flow<List<HabitEntity>> = habitDao.getAllHabits()
     override suspend fun insertHabit(habit: HabitEntity) = habitDao.insertHabit(habit)
     override suspend fun deleteHabit(habit: HabitEntity) = habitDao.deleteHabit(habit)
-
-    // Habit Logs
-    override fun getHabitLogsStream(habitId: String): Flow<List<HabitLogEntity>> = 
-        habitDao.getLogsForHabit(habitId)
-
-    override suspend fun completeHabit(habitId: String, date: LocalDate) {
-        val millis = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        habitDao.insertHabitLog(HabitLogEntity(habitId = habitId, date = millis))
-    }
-
-    override suspend fun uncompleteHabit(habitId: String, date: LocalDate) {
-        val millis = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        habitDao.deleteHabitLog(habitId, millis)
+    override suspend fun incrementStreak(habitId: String) {
+        habitDao.incrementStreak(habitId)
     }
 
     // Water

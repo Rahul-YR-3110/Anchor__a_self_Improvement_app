@@ -10,7 +10,6 @@ import com.example.anchor.data.local.daos.HabitDao
 import com.example.anchor.data.local.daos.JournalDao
 import com.example.anchor.data.local.daos.WaterIntakeDao
 import com.example.anchor.data.local.entities.HabitEntity
-import com.example.anchor.data.local.entities.HabitLogEntity
 import com.example.anchor.data.local.entities.JournalEntity
 import com.example.anchor.data.local.entities.WaterIntakeEntity
 
@@ -18,7 +17,6 @@ import com.example.anchor.data.local.entities.WaterIntakeEntity
     entities = [
         JournalEntity::class,
         HabitEntity::class,
-        HabitLogEntity::class,
         WaterIntakeEntity::class
     ],
     version = 1,

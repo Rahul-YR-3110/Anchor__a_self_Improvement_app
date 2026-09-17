@@ -9,5 +9,6 @@ data class HabitEntity(
     @PrimaryKey 
     val id: String = UUID.randomUUID().toString(),
     val title: String,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val streak: Int = 0
 )

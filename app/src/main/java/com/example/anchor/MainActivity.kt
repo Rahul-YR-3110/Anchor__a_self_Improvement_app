@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import com.example.anchor.ui.pages.HabitTrackerScreen
 import com.example.anchor.ui.pages.JournalScreen
 import com.example.anchor.ui.pages.AppBlockerScreen
+import com.example.anchor.ui.pages.WaterIntakeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
                         composable("journals") { JournalScreen() }
                         composable("HabitTracker") { HabitTrackerScreen() }
                         composable("AppBlockerScreen") { AppBlockerScreen(navController = navController) }
+                        composable("WaterIntakeScreen") { WaterIntakeScreen() }
                     }
             }
         }
@@ -44,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun NotesScreenPreview() {
+fun HomeScreenPreview() {
     AnchorTheme(darkTheme=true) {
         val fakeNavController = rememberNavController()
         HomeScreen(navController = fakeNavController)

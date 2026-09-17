@@ -185,7 +185,7 @@ fun AppItem(app: AppInfo) {
                 )
             }
             var isEnabled by remember {
-                mutableStateOf(true)
+                mutableStateOf(false)
             }
             Switch(
                 checked = isEnabled,

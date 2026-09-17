@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.anchor.data.local.entities.HabitEntity
 import com.example.anchor.ui.AppViewModelProvider
 import com.example.anchor.ui.theme.AnchorTheme
-import com.example.anchor.ui.viewmodels.HabitItem
 import com.example.anchor.ui.viewmodels.HabitViewModel
 
 @Composable
@@ -70,13 +70,13 @@ fun HabitTrackerScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "${uiState.habitItems.size} Habits are being tracked",
+                text = "${uiState.habits.size} Habits are being tracked",
                 fontSize = 15.sp,
                 color = Color.White.copy(alpha = 0.7f),
                 modifier = Modifier.padding(start = 12.dp, bottom = 16.dp)
             )
             
-            if (uiState.habitItems.isEmpty()) {
+            if (uiState.habits.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -91,12 +91,11 @@ fun HabitTrackerScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
-                    items(uiState.habitItems, key = { it.habit.id }) { item ->
+                    items(uiState.habits, key = { it.id }) { habit ->
                         HabitEntryCard(
-                            item = item,
-                            onToggle = {
-                                viewModel.toggleHabitCompletion(item.habit.id, !item.isCompletedToday)
-                            }
+                            habit = habit,
+                            onDelete = { viewModel.deleteHabit(habit)},
+                            onIncrement = { viewModel.incrementStreak(habit.id) }
                         )
                     }
                 }
@@ -116,58 +115,82 @@ fun HabitTrackerScreen(
 }
 
 @Composable
-fun HabitEntryCard(item: HabitItem, onToggle: () -> Unit) {
+fun HabitEntryCard(
+    habit: HabitEntity,
+    onDelete: () -> Unit,
+    onIncrement: () -> Unit
+) {
     val cardBackground = Color(0xFF2C2C2C)
     val textColor = Color.White.copy(alpha = 0.8f)
-    
+
     Card(
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = cardBackground),
+        colors = CardDefaults.cardColors(
+            containerColor = cardBackground
+        ),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+
+            // Habit name + streak
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
-                    text = item.habit.title,
+                    text = habit.title,
                     fontSize = 15.sp,
                     lineHeight = 22.sp,
                     color = textColor,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Streak: ${item.streak} days",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+                Row(){
+                    Text(
+                        text = "Streak: ",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = habit.streak.toString(),
+                        fontSize = 14.sp,
+                        color = Color.White.copy(alpha = 0.7f)
+                    )
+                }
             }
-            
+
+            // + button
             IconButton(
-                onClick = onToggle,
+                onClick = onIncrement,
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (item.isCompletedToday) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
-                    contentColor = Color.White
-                ),
-                modifier = Modifier.size(40.dp)
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
             ) {
                 Icon(
-                    imageVector = if (item.isCompletedToday) Icons.Default.Check else Icons.Default.Add,
-                    contentDescription = if (item.isCompletedToday) "Completed" else "Mark Complete",
-                    modifier = Modifier.size(24.dp)
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Increase streak"
+                )
+            }
+            IconButton(
+                onClick = onDelete,
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = Color.White.copy(alpha = 0.6f)
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete Habit"
                 )
             }
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitBottomSheet(
@@ -240,5 +263,12 @@ fun AddHabitBottomSheet(
                 }
             }
         }
+    }
+}
+@Composable
+@Preview()
+fun HabitScreenPreview(){
+    AnchorTheme(darkTheme = true) {
+        HabitEntryCard(habit = HabitEntity(title = "Yoga", streak = 10), onDelete = {}, onIncrement = {})
     }
 }

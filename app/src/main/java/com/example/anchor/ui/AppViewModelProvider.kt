@@ -6,7 +6,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.anchor.AnchorApplication
 import com.example.anchor.data.local.entities.HabitEntity
-import com.example.anchor.data.local.entities.HabitLogEntity
 import com.example.anchor.data.local.entities.JournalEntity
 import com.example.anchor.data.local.entities.WaterIntakeEntity
 import com.example.anchor.data.repository.AnchorRepository
@@ -46,12 +45,9 @@ private object PreviewAnchorRepository : AnchorRepository {
     override suspend fun insertHabit(habit: HabitEntity) {}
     override suspend fun deleteHabit(habit: HabitEntity) {}
 
-    override fun getHabitLogsStream(habitId: String): Flow<List<HabitLogEntity>> = flowOf(emptyList())
-    override suspend fun completeHabit(habitId: String, date: LocalDate) {}
-    override suspend fun uncompleteHabit(habitId: String, date: LocalDate) {}
-
     override fun getWaterIntakeStream(date: LocalDate): Flow<WaterIntakeEntity?> = flowOf(null)
     override suspend fun upsertWaterIntake(waterIntake: WaterIntakeEntity) {}
+    override suspend fun incrementStreak(habitId: String){}
 }
 
 /**
