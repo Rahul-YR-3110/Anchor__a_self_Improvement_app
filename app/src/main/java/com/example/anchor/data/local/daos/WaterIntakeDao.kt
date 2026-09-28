@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 interface WaterIntakeDao {
     @Query("SELECT * FROM water_intake WHERE date = :date")
     fun getWaterIntakeForDate(date: Long): Flow<WaterIntakeEntity?>
-
     @Upsert
     suspend fun upsertWaterIntake(waterIntake: WaterIntakeEntity)
 }

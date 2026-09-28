@@ -5,12 +5,9 @@ import com.example.anchor.data.AppContainer
 import com.example.anchor.data.DefaultAppContainer
 
 class AnchorApplication : Application() {
-    /**
-     * AppContainer instance used by the rest of classes to obtain dependencies
-     */
     lateinit var container: AppContainer
 
-    override fun onCreate() {
+     override fun onCreate() {
         super.onCreate()
         container = DefaultAppContainer(this)
     }

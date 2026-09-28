@@ -1,4 +1,4 @@
-package com.example.anchor.ui.pages
+package com.example.anchor.ui.pages.Screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +23,7 @@ import com.example.anchor.data.local.entities.HabitEntity
 import com.example.anchor.ui.AppViewModelProvider
 import com.example.anchor.ui.theme.AnchorTheme
 import com.example.anchor.ui.viewmodels.HabitViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun HabitTrackerScreen(
@@ -30,7 +31,6 @@ fun HabitTrackerScreen(
 ) {
     val uiState by viewModel.habitUiState.collectAsState()
     var showAddHabit by remember { mutableStateOf(false) }
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
@@ -122,7 +122,6 @@ fun HabitEntryCard(
 ) {
     val cardBackground = Color(0xFF2C2C2C)
     val textColor = Color.White.copy(alpha = 0.8f)
-
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
@@ -153,7 +152,7 @@ fun HabitEntryCard(
                 Spacer(modifier = Modifier.height(6.dp))
                 Row(){
                     Text(
-                        text = "Streak: ",
+                        text = "Streak : ",
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -163,6 +162,11 @@ fun HabitEntryCard(
                         color = Color.White.copy(alpha = 0.7f)
                     )
                 }
+                Text(
+                    text="Started : ${habit.createdAt.toRelativeFormattedString().split(",")[0]} ",
+                    fontSize = 10.sp,
+                    color= MaterialTheme.colorScheme.secondary
+                )
             }
 
             // + button
@@ -269,6 +273,6 @@ fun AddHabitBottomSheet(
 @Preview()
 fun HabitScreenPreview(){
     AnchorTheme(darkTheme = true) {
-        HabitEntryCard(habit = HabitEntity(title = "Yoga", streak = 10), onDelete = {}, onIncrement = {})
+        HabitEntryCard(habit = HabitEntity(id = "1", title = "Gym", streak = 5, createdAt = LocalDateTime.of(2026, 9, 2, 14, 0)), onDelete = {}, onIncrement = {})
     }
 }

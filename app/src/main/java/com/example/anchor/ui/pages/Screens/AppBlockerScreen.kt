@@ -1,4 +1,4 @@
-package com.example.anchor.ui.pages
+package com.example.anchor.ui.pages.Screens
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,7 +16,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.contentcapture.ContentCaptureManager.Companion.isEnabled
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.NavController
+import com.example.anchor.ui.theme.AnchorTheme
 import com.example.anchor.ui.theme.TextGray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -50,7 +50,6 @@ fun AppBlockerScreen(
             val intent = Intent(Intent.ACTION_MAIN).apply {
                 addCategory(Intent.CATEGORY_LAUNCHER)
             }
-
             packageManager
                 .queryIntentActivities(intent, PackageManager.MATCH_ALL)
                 .map { resolveInfo ->
@@ -200,6 +199,10 @@ fun AppItem(app: AppInfo) {
 @Preview
 @Composable
 fun AppBlockerScreenPreview() {
-    AppItem(AppInfo("WhatsApp", "com.whatsapp", ColorDrawable(Color.BLUE)))
+    AnchorTheme(
+        darkTheme = true
+    ) {
+        AppItem(AppInfo("WhatsApp", "com.whatsapp", ColorDrawable(Color.BLUE)))
+    }
 }
 

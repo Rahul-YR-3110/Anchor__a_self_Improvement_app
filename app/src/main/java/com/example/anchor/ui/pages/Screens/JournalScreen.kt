@@ -1,4 +1,4 @@
-package com.example.anchor.ui.pages
+package com.example.anchor.ui.pages.Screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -47,11 +47,11 @@ fun LocalDateTime.toRelativeFormattedString(): String {
     val entryDate = this.toLocalDate()
     val timeFormatter = DateTimeFormatter.ofPattern("h:mm a")
     val timeString = this.format(timeFormatter).lowercase()
-
+    val dateFormatter = DateTimeFormatter.ofPattern("MMM d,yyyy")
     return when {
         entryDate.isEqual(today) -> "Today, $timeString"
         entryDate.isEqual(today.minusDays(1)) -> "Yesterday, $timeString"
-        else -> "${this.format(DateTimeFormatter.ofPattern("EEE"))}, $timeString"
+        else -> "${this.format(dateFormatter)} $timeString"
     }
 }
 
@@ -126,7 +126,7 @@ fun JournalScreen(
                     contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
                     itemsIndexed(uiState.journalList, key = { _, entry -> entry.id }) { index, entry ->
-                        JournalEntryCard(entry = entry, isHighlighted = index == 0)
+                        JournalEntryCard(entry = entry, isHighlighted = index == 0, OnDelete = { viewModel.deleteJournalEntry(entry) })
                     }
                 }
             }
@@ -145,7 +145,9 @@ fun JournalScreen(
 }
 
 @Composable
-fun JournalEntryCard(entry: JournalEntity, isHighlighted: Boolean) {
+fun JournalEntryCard(entry: JournalEntity,
+                     isHighlighted: Boolean,
+                     OnDelete:()-> Unit) {
     val cardBackground = if (isHighlighted) Color(0xFFFBF0EA) else Color(0xFF2C2C2C)
     val titleColor = if (isHighlighted) Color(0xFF5C1E0A) else Color.White
     val textColor = if (isHighlighted) Color(0xFF6E2D18) else Color.White.copy(alpha = 0.8f)
@@ -162,18 +164,31 @@ fun JournalEntryCard(entry: JournalEntity, isHighlighted: Boolean) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = entry.timestamp.toRelativeFormattedString(),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = titleColor
-                )
-                Icon(
-                    imageVector = entry.mood.icon,
-                    contentDescription = entry.mood.label,
-                    tint = iconTint,
-                    modifier = Modifier.size(20.dp)
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = entry.mood.icon,
+                        contentDescription = entry.mood.label,
+                        tint = iconTint,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = entry.timestamp.toRelativeFormattedString(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = titleColor
+                    )
+                }
+                Row() {
+                    IconButton(onClick = OnDelete) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete Journal Entry",
+                            modifier = Modifier.size(25.dp),
+                            tint= if (isHighlighted) Color(0xFF5C1E0A) else Color.White.copy(alpha = 0.7f)
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(10.dp))
             Text(
@@ -290,6 +305,6 @@ fun AddJournalBottomSheet(
 @Composable
 fun JournalScreenPreview(){
     AnchorTheme(darkTheme = true) {
-        JournalScreen()
+        JournalEntryCard(entry =JournalEntity(notes = "This is a test", timestamp = LocalDateTime.of(2026, 9, 2, 14, 0), mood = Mood.SUNNY), isHighlighted = true, OnDelete = {})
     }
 }
