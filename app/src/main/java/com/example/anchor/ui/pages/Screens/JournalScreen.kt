@@ -97,7 +97,7 @@ fun JournalScreen(
                     text = "Journal",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -106,7 +106,7 @@ fun JournalScreen(
             Text(
                 text = "${uiState.journalList.size} entries this week",
                 fontSize = 15.sp,
-                color = Color.White.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(start = 12.dp, bottom = 16.dp)
             )
 
@@ -117,7 +117,7 @@ fun JournalScreen(
                 ) {
                     Text(
                         text = "No entries yet! Tap the + button to add one.",
-                        color = Color.White.copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             } else {
@@ -148,10 +148,10 @@ fun JournalScreen(
 fun JournalEntryCard(entry: JournalEntity,
                      isHighlighted: Boolean,
                      OnDelete:()-> Unit) {
-    val cardBackground = if (isHighlighted) Color(0xFFFBF0EA) else Color(0xFF2C2C2C)
-    val titleColor = if (isHighlighted) Color(0xFF5C1E0A) else Color.White
-    val textColor = if (isHighlighted) Color(0xFF6E2D18) else Color.White.copy(alpha = 0.8f)
-    val iconTint = if (isHighlighted) Color(0xFF5C1E0A) else Color.White.copy(alpha = 0.7f)
+    val cardBackground =Color(0xFFFBF0EA)
+    val titleColor =Color(0xFF5C1E0A)
+    val textColor = Color(0xFF6E2D18)
+    val iconTint =Color(0xFF5C1E0A)
     
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -185,7 +185,7 @@ fun JournalEntryCard(entry: JournalEntity,
                             imageVector = Icons.Default.Delete,
                             contentDescription = "Delete Journal Entry",
                             modifier = Modifier.size(25.dp),
-                            tint= if (isHighlighted) Color(0xFF5C1E0A) else Color.White.copy(alpha = 0.7f)
+                            tint= iconTint
                         )
                     }
                 }

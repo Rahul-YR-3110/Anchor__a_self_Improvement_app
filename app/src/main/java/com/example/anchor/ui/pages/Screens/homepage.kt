@@ -10,7 +10,6 @@ import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocalBar
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.outlined.LocalBar
@@ -32,7 +31,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.anchor.ui.AppViewModelProvider
 import com.example.anchor.ui.theme.AnchorTheme
-import com.example.anchor.ui.theme.TextGray
 import com.example.anchor.ui.viewmodels.HabitViewModel
 import com.example.anchor.ui.viewmodels.JournalViewModel
 import com.example.anchor.ui.viewmodels.WaterViewModel
@@ -127,7 +125,7 @@ fun GreetingHeader(time: LocalDateTime) {
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
             fontFamily = FontFamily.SansSerif,
-            color = TextGray
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = "Rahul",
@@ -146,10 +144,10 @@ fun WaterIntake(
     onIncrement: () -> Unit,
     NavController: NavController
 ) {
-    val glassFilled = Color(0xFF1E398A)
+    val glassFilled = Color(0xFF00B1FF)
     Box(
         modifier = Modifier
-            .padding(top = 20.dp, start = 5.dp, end = 5.dp)
+            .padding(top = 20.dp, start = 10.dp, end = 10.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(size = 28.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
@@ -232,7 +230,7 @@ fun WaterIntake(
 
 @Composable
 private fun GlassIcon(filled: Boolean) {
-    val glassFilled = Color(0xFF1E398A)
+    val glassFilled = Color(0xFF00B1FF)
     val glassEmpty = Color(0xFFEFC2AC)
     Icon(
         imageVector = if (filled) Icons.Filled.LocalBar else Icons.Outlined.LocalBar,
@@ -279,7 +277,7 @@ fun JournalCard(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "$entryCount entries",
-            color = TextGray,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 13.sp
         )
     }
@@ -321,7 +319,7 @@ fun AppBlockerCard(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "2 apps blocked",
-            color = TextGray,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 13.sp
         )
     }
@@ -364,7 +362,7 @@ fun HabitTrackerCard(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "$habitCount habits tracked",
-            color = TextGray,
+            color =MaterialTheme.colorScheme.onSurface,
             fontSize = 13.sp
         )
     }

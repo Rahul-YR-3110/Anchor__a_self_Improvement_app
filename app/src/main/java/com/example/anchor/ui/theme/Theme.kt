@@ -10,22 +10,45 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 // 1. Define your custom dark color scheme mapping here
-private val CustomDarkColorScheme = darkColorScheme(
-    background = BackgroundDark,
-    surface = CardDark,                  // Standard small cards
-    surfaceVariant = MainCardLight,      // The special light water card
-    primary = TerracottaAccent,          // The orange "+" button
-    secondary = LightTerracotta,
-    onBackground = TextWhite,            // Text on main background
-    onSurface = TextWhite,               // Text on standard cards
-    onSurfaceVariant = TextDarkBrown,    // Dark text inside the light card
+
+private val LightColorScheme = lightColorScheme(
+    primary = LightPrimary,
+    onPrimary = LightOnPrimary,
+    primaryContainer = LightPrimaryContainer,
+    onPrimaryContainer = LightOnPrimaryContainer,
+    secondary = LightSecondary,
+    onSecondary = LightOnSecondary,
+    tertiary = LightTertiary,
+    onTertiary = LightOnTertiary,
+    background = LightBackground,
+    onBackground = LightOnBackground,
+    surface = LightSurface,
+    onSurface = LightOnSurface,
+    surfaceVariant = LightSurfaceVariant,
+    onSurfaceVariant = LightOnSurfaceVariant,
+    outline = LightOutline,
+    error = LightError,
+    onError = LightOnError
 )
 
-// Optional: Fallback light scheme if you ever turn off dark mode
-private val CustomLightColorScheme = lightColorScheme(
-    primary = TerracottaAccent,
-    background = TextWhite,
-    surface = MainCardLight
+private val DarkColorScheme = darkColorScheme(
+    primary = DarkPrimary,
+    onPrimary = DarkOnPrimary,
+    primaryContainer = DarkPrimaryContainer,
+    onPrimaryContainer = DarkOnPrimaryContainer,
+    secondary = DarkSecondary,
+    onSecondary = DarkOnSecondary,
+    tertiary = DarkTertiary,
+    onTertiary = DarkOnTertiary,
+    background = DarkBackground,
+    onBackground = DarkOnBackground,
+    surface = DarkSurface,
+    onSurface = DarkOnSurface,
+    surfaceVariant = DarkSurfaceVariant,
+    onSurfaceVariant = DarkOnSurfaceVariant,
+    outline = DarkOutline,
+    error = DarkError,
+    onError = DarkOnError
 )
 
 @Composable
@@ -41,8 +64,8 @@ fun AnchorTheme(
         }
 
         // 3. Point these to your new custom configurations
-        darkTheme -> CustomDarkColorScheme
-        else -> CustomLightColorScheme
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
     }
 
     MaterialTheme(

@@ -65,14 +65,14 @@ fun HabitTrackerScreen(
                     text = "Habit Tracker",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "${uiState.habits.size} Habits are being tracked",
                 fontSize = 15.sp,
-                color = Color.White.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(start = 12.dp, bottom = 16.dp)
             )
             
@@ -83,7 +83,7 @@ fun HabitTrackerScreen(
                 ) {
                     Text(
                         text = "No entries yet! Tap the + button to add one.",
-                        color = Color.White.copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             } else {
@@ -120,8 +120,8 @@ fun HabitEntryCard(
     onDelete: () -> Unit,
     onIncrement: () -> Unit
 ) {
-    val cardBackground = Color(0xFF2C2C2C)
-    val textColor = Color.White.copy(alpha = 0.8f)
+    val cardBackground = MaterialTheme.colorScheme.surface
+    val textColor = MaterialTheme.colorScheme.onSurface
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
@@ -146,7 +146,7 @@ fun HabitEntryCard(
                     lineHeight = 22.sp,
                     color = textColor,
                     maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -159,7 +159,7 @@ fun HabitEntryCard(
                     Text(
                         text = habit.streak.toString(),
                         fontSize = 14.sp,
-                        color = Color.White.copy(alpha = 0.7f)
+                        color = textColor
                     )
                 }
                 Text(
@@ -184,7 +184,7 @@ fun HabitEntryCard(
             IconButton(
                 onClick = onDelete,
                 colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = Color.White.copy(alpha = 0.6f)
+                    contentColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Icon(
@@ -205,7 +205,7 @@ fun AddHabitBottomSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = Color(0xFF2C2C2C),
+        containerColor = MaterialTheme.colorScheme.background,
         contentColor = Color.White,
         dragHandle = {
             BottomSheetDefaults.DragHandle(
@@ -223,7 +223,7 @@ fun AddHabitBottomSheet(
                 text = "New Habit",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = MaterialTheme.colorScheme.onSurface
             )
             OutlinedTextField(
                 value = habitTitle,
@@ -241,7 +241,7 @@ fun AddHabitBottomSheet(
                     unfocusedContainerColor = Color.White.copy(alpha = 0.05f)
                 ),
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("Habit Name", color = Color.White.copy(alpha = 0.7f)) }
+                label = { Text("Habit Name", color = MaterialTheme.colorScheme.secondary) }
             )
 
             Row(
@@ -260,10 +260,9 @@ fun AddHabitBottomSheet(
                             onSave(habitTitle)
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD85834)),
-                    enabled = habitTitle.isNotBlank()
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 ) {
-                    Text("Save", color = Color.White)
+                    Text("Save", color = Color.Black)
                 }
             }
         }
@@ -272,7 +271,7 @@ fun AddHabitBottomSheet(
 @Composable
 @Preview()
 fun HabitScreenPreview(){
-    AnchorTheme(darkTheme = true) {
+    AnchorTheme() {
         HabitEntryCard(habit = HabitEntity(id = "1", title = "Gym", streak = 5, createdAt = LocalDateTime.of(2026, 9, 2, 14, 0)), onDelete = {}, onIncrement = {})
     }
 }
